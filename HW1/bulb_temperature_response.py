@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy
 from control.matlab import * # MATLAB-like control toolbox functionality
 
 # Close all figures
