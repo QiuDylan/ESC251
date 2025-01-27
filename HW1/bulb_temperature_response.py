@@ -1,11 +1,12 @@
+# %%
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy
 from control.matlab import * # MATLAB-like control toolbox functionality
 
+# %%
 # Close all figures
 plt.close('all')
-
 # Set up bulb-temperature model
 # Input: electric energy, Output: Temperature (above ambient)
 a, b = (-.0067, .67)
@@ -26,3 +27,5 @@ ax.set_ylabel('Temperature above ambient [K]'),
 ax.legend(('bulb ON (warming up)','bulb OFF (cooling down)'))
 #axis([0 2500 0 110])
 plt.show()
+
+# %%
