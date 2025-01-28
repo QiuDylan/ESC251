@@ -26,6 +26,7 @@ ax.set_xlabel('Time [s]')
 ax.set_ylabel('Temperature above ambient [K]'),
 ax.legend(('bulb ON (warming up)','bulb OFF (cooling down)'))
 #axis([0 2500 0 110])
+
 plt.show()
 
 # %%
