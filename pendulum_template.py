@@ -4,13 +4,13 @@ Description: Simulation pendulum equations (linearized, nonlinear)
 Author: Dirk M. Luchtenburg
 Date Created: Feb. 2025
 """
-
+# %%
 
 import numpy as np
 import matplotlib.pyplot as plt
 from control.matlab import *  # MATLAB-like control toolbox functionality
 from scipy.integrate import solve_ivp
-
+# %%
 # Close all figures
 plt.close('all')
 
@@ -78,3 +78,4 @@ plt.ylabel(r'$ \theta~ [rad], \omega~ [rad/s]$')
 plt.legend()
 plt.title('IC response')
 plt.show()
+# %%
