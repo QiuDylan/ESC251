@@ -31,13 +31,11 @@ omega0 = 0
 
 # ...FILL IN THE BLANKS....
 
-A = np.array([   
-])
-B = np.array([
-])
+A = np.array([[0,1],
+             [- omega_n, 0]])
+B = np.array([[0], [1/(m * l ** 2)]])
 C = np.eye(2)
-D = np.array([
-    ])
+D = np.array([[0],[0]])
 sys = ss(A, B, C, D)
 # --- Nonlinear model -----
 
@@ -45,7 +43,10 @@ sys = ss(A, B, C, D)
 
 def pend(t, x):
     theta, omega = x   
-    return 
+    f = np.array([[omega],
+                  [-omega_n * np.sin(theta) + t / (m * l ** 2)]]
+    )
+    return [omega,-omega_n * np.sin(theta) + 0 / (m * l ** 2)]
 
 
 # IC responses
