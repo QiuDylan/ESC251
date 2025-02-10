@@ -18,7 +18,8 @@ plt.close('all')
 m = 1
 g = 10
 l = 1
-
+b = 3
+k = 3
 # Derived quantities
 omega_n = np.sqrt(g/l)
 T = 2*np.pi / omega_n
@@ -32,8 +33,8 @@ omega0 = 0
 # ...FILL IN THE BLANKS....
 
 A = np.array([[0,1],
-             [- omega_n, 0]])
-B = np.array([[0], [1/(m * l ** 2)]])
+             [- omega_n**2, -b/m]])
+B = np.array([[0], [1/m]])
 C = np.eye(2)
 D = np.array([[0],[0]])
 sys = ss(A, B, C, D)
@@ -44,7 +45,7 @@ sys = ss(A, B, C, D)
 def pend(t, x):
     theta, omega = x   
     #f = [[omega],[-omega_n * np.sin(theta) + t / (m * l ** 2)]]
-    return [omega,-omega_n * np.sin(theta)]
+    return [omega, omega_n**2 * np.sin(theta)]
 
 
 # IC responses
@@ -55,22 +56,23 @@ y, t = initial(sys, t, x0)
 theta_lin = y[:,0]
 omega_lin = y[:,1]
 # --- Nonlinear model -----
-tspan = [t[0], t[-1]]
-sol = solve_ivp(pend, tspan, x0, t_eval=t, rtol=1e-6, atol=1e-9)
-theta = sol.y[0,:]
-omega = sol.y[1,:]
+
+#tspan = [t[0], t[-1]]
+#sol = solve_ivp(pend, tspan, x0, t_eval=t, rtol=1e-6, atol=1e-9)
+#theta = sol.y[0,:]
+#omega = sol.y[1,:]
+
+#plt.figure()
+#plt.plot(t, theta, label=r'$\theta$')
+#plt.plot(t, omega, label=r'$\omega$')
+#plt.xlabel('$t [s]$')
+#plt.ylabel(r'$ \theta~ [rad], \omega~ [rad/s]$')
+##plt.legend()
+#plt.title('IC response')
+
 
 plt.figure()
-plt.plot(t, theta, label=r'$\theta$')
-plt.plot(t, omega, label=r'$\omega$')
-plt.xlabel('$t [s]$')
-plt.ylabel(r'$ \theta~ [rad], \omega~ [rad/s]$')
-plt.legend()
-plt.title('IC response')
-
-
-plt.figure()
-plt.plot(t, theta, label=r'$\theta$')
+#plt.plot(t, theta, label=r'$\theta$')
 plt.plot(t, theta_lin, label=r'$\theta$ (linear model)')
 plt.xlabel('$t [s]$')
 plt.ylabel(r'$ \theta~ [rad], \omega~ [rad/s]$')
