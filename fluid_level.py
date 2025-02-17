@@ -74,6 +74,9 @@ plt.grid(True)
 plt.show()
 # %%
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 # Define the time range
 t = np.linspace(0, 20, 400)
 
@@ -81,7 +84,7 @@ t = np.linspace(0, 20, 400)
 y = 4 * np.exp(-0.5 * t) * np.sin(0.5 * t)
 
 # Plot the solution
-plt.figure(figsize=(10, 6))
+plt.figure()
 plt.plot(t, y, label='y(t) = 4 * exp(-0.5t) * sin(0.5t)')
 plt.title('Solution to the Initial Value Problem')
 plt.xlabel('Time (t)')
@@ -89,5 +92,6 @@ plt.ylabel('y(t)')
 plt.grid(True)
 plt.legend()
 plt.show()
+
 
 # %%
