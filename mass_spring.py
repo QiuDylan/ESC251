@@ -17,12 +17,14 @@ plt.close('all')
 # Parameters
 m = 1
 g = 10
-l = 1
-b = 3
-k = 3
+#l = 1
+b = 2
+k = 2
 # Derived quantities
-omega_n = np.sqrt(g/l)
-T = 2*np.pi / omega_n
+zeta = b / m
+omega_n = k / m 
+omega_d = omega_n * np.sqrt(1 - zeta**2)
+T = 2 * np.pi / omega_n
 
 # ICs
 theta0 = np.pi/8
@@ -33,7 +35,7 @@ omega0 = 0
 # ...FILL IN THE BLANKS....
 
 A = np.array([[0,1],
-             [- omega_n**2, -b/m]])
+             [- omega_n**2, - zeta]])
 B = np.array([[0], [1/m]])
 C = np.eye(2)
 D = np.array([[0],[0]])
@@ -45,7 +47,7 @@ sys = ss(A, B, C, D)
 def pend(t, x):
     theta, omega = x   
     #f = [[omega],[-omega_n * np.sin(theta) + t / (m * l ** 2)]]
-    return [omega, omega_n**2 * np.sin(theta)]
+    return [omega, omega_n**np.sin(theta)]
 
 
 # IC responses
@@ -69,7 +71,6 @@ omega_lin = y[:,1]
 #plt.ylabel(r'$ \theta~ [rad], \omega~ [rad/s]$')
 ##plt.legend()
 #plt.title('IC response')
-
 
 plt.figure()
 #plt.plot(t, theta, label=r'$\theta$')
