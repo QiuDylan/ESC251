@@ -54,3 +54,19 @@ plt.gca().set_yticks(np.arange(0, 0.6, 0.1))
 
 plt.show()
 # %%
+# Define the time range
+t = np.linspace(0, 20, 400)
+
+# Define the analytical solution
+y = 4 * np.exp(-0.5 * t) * np.sin(0.5 * t)
+
+# Plot the solution
+plt.figure(figsize=(10, 6))
+plt.plot(t, y, label='y(t) = 4 * exp(-0.5t) * sin(0.5t)')
+plt.title('Solution to the Initial Value Problem')
+plt.xlabel('Time (t)')
+plt.ylabel('y(t)')
+plt.grid(True)
+plt.legend()
+plt.show()
+

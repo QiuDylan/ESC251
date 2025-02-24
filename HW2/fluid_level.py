@@ -56,7 +56,7 @@ C = np.eye(2)
 D = np.zeros((2, 1))
 
 # Create the state space system
-sys = ctrl.ss(A, B, C, D)
+sys = ss(A, B, C, D)
 
 # Compute the step response
 t = np.linspace(0, 1000, 1000)
@@ -71,6 +71,38 @@ plt.ylabel('Fluid Level')
 plt.title('Step Response - Fluid Levels with Constant Inflow')
 plt.legend()
 plt.grid(True)
+plt.show()
+
+# Step response
+t = np.linspace(0, 400, 1000)
+y, t = step(sys, t)
+y = np.squeeze(y)
+
+plt.figure()
+plt.plot(t, y)
+plt.grid()
+plt.xlabel('Time [s]')
+plt.ylabel(r'$h_1$, $h_2$ [m]')
+plt.title('Step response')
+plt.legend((r'$h_1$',r'$h_2$'))
+
+
+# Step response difference
+#  y = h1 - h2
+C_diff = np.array([1, -1])
+sys_diff = ss(A,B,C_diff,0)
+# Step response
+y, t = step(sys_diff, t)
+
+plt.figure()
+plt.plot(t, y)
+plt.grid()
+plt.xlabel('Time [s]')
+plt.ylabel(r'$h_1 - h_2$ [m]')
+plt.title('Step response difference')
+
+
+
 plt.show()
 # %%
 
@@ -90,3 +122,5 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
+
+# %%
