@@ -20,7 +20,7 @@ tau = R * C
 # ICs
 Vout0 = 0      # Initial output voltage
 dVout0 = 0     # Initial rate of change
-
+x0 = [Vout0, dVout0]
 # --- State Space Model -----
 A = np.array([[0,1],
              [-1 / (L * C), - R / L]])
