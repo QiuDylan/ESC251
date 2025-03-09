@@ -34,7 +34,7 @@ sys = ss(A, B, C, D)
 t = np.linspace(0, 400, 1000)
 
 # Step response
-y, t = step(sys, t)
+y, t = initial(sys, t)
 y = np.squeeze(y)
 # Analytical solution
 #Vout_analytical = K * (1 - np.exp(-t/tau))
@@ -53,10 +53,6 @@ plt.title('Step Response of R:C Filter')
 # Format plot to match homework figure
 
 plt.show()
+
+
 # %%
-# Define the time range
-t = np.linspace(0, 20, 400)
-
-# Define the analytical solution
-y = 4 * np.exp(-0.5 * t) * np.sin(0.5 * t)
-
