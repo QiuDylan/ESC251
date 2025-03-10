@@ -69,9 +69,11 @@ plt.grid()
 plt.title('Initial condition response')
 # %%
 
-eigenvalues = np.linalg.eig(A)
+eigenresult = np.linalg.eig(A)
+eigenvector = eigenresult[1]
+print(eigenvector)
 print(np.linalg.eig(A))
 # %%
-init_vals = np.linalg.solve(C,A)
+init_vals = np.linalg.solve(eigenvector,x0)
 print(init_vals)
 # %%
