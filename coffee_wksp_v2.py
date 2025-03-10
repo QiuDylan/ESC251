@@ -76,5 +76,19 @@ print('evec0= ', evecs[:,0])
 print('evec0= ', evecs[:,1])
 # %%
 init_vals = np.linalg.solve(evecs,x0)
+xa = np.zeros((2,len(t)))
+for (i,time) in enumerate(t):
+    xa[:,i] = init_vals[0] * evecs[:,0] * np.exp(evals[0]*time) + \
+    init_vals[1] * evecs[:,1] * np.exp(evals[1]*time)
+Tma = xa[0,:]
+Tca = xa[0,:]
 print(init_vals)
+plt.figure()
+plt.plot(t, Tma, label = r'T_ma')
+plt.plot(t, Tca, label = r'T_ca')
+plt.legend()
+plt.xlabel('Time [s]')
+plt.ylabel('Temperature [C]')
+plt.grid()
+plt.title('Initial condition response')
 # %%
