@@ -69,11 +69,12 @@ plt.grid()
 plt.title('Initial condition response')
 # %%
 
-eigenresult = np.linalg.eig(A)
-eigenvector = eigenresult[1]
-print(eigenvector)
-print(np.linalg.eig(A))
+evals, evecs = np.linalg.eig(A)
+for eval in evals: 
+    print(f'eval = {eval: .6f}')
+print('evec0= ', evecs[:,0])
+print('evec0= ', evecs[:,1])
 # %%
-init_vals = np.linalg.solve(eigenvector,x0)
+init_vals = np.linalg.solve(evecs,x0)
 print(init_vals)
 # %%
