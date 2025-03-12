@@ -6,12 +6,11 @@ Implementation of Coffee-Mug workshop
 import numpy as np
 import control as ct
 import matplotlib.pyplot as plt
-from numpy import linalg as LA
 
 __author__ = "Dirk M. Luchtenburg"
 __version__ = "Feb. 2025"
 __copyright__ = "Copyright 2025, Dirk M. Luchtenburg"
-
+# %%
 # Parameters
 Ta = 20 # C
 #  Coffee
@@ -67,28 +66,55 @@ plt.xlabel('Time [s]')
 plt.ylabel('Temperature [C]')
 plt.grid()
 plt.title('Initial condition response')
-# %%
 
+
+
+# -- Initial Condition Response w/ eigenvalues and eigenvectors --
 evals, evecs = np.linalg.eig(A)
-for eval in evals: 
-    print(f'eval = {eval: .6f}')
-print('evec0= ', evecs[:,0])
-print('evec0= ', evecs[:,1])
-# %%
-init_vals = np.linalg.solve(evecs,x0)
-xa = np.zeros((2,len(t)))
-for (i,time) in enumerate(t):
-    xa[:,i] = init_vals[0] * evecs[:,0] * np.exp(evals[0]*time) + \
-    init_vals[1] * evecs[:,1] * np.exp(evals[1]*time)
-Tma = xa[0,:]
-Tca = xa[0,:]
-print(init_vals)
+for eval in evals:
+    print(f'eval = {eval:.6f}')
+print('evec0 = ', evecs[:,0])
+print('evec0 = ', evecs[:,1])
+
+
+# Check: A v_i - lambda_i vi
+#print(A@evecs[:,0]- evals[0]*evecs[:,0])
+#print(A@evecs[:,1]- evals[1]*evecs[:,1])
+
+
 plt.figure()
-plt.plot(t, Tma, label = r'T_ma')
-plt.plot(t, Tca, label = r'T_ca')
+plt.plot(np.real(evals), np.imag(evals), 'x')
+plt.xlabel('Real')
+plt.ylabel('imag')
+plt.title('Pole / Eigenvalue plot')
+
+# Solution is: x(t) = c1 * exp(eval1*t) * v1 + c2 * exp(eval2*t) * v2
+c = np.linalg.solve(evecs, x0)
+xa = np.zeros((2, len(t)))
+for (index, time) in enumerate(t):
+    xa[:,index] = c[0] * evecs[:,0] * np.exp(evals[0]*time) + \
+    c[1] * evecs[:,1] * np.exp(evals[1]*time)
+
+Tca = xa[0,:] #+ Ta
+Tma = xa[1,:] #+ Ta
+
+plt.figure()
+plt.plot(t, Tca, label=r'$T_c$')
+plt.plot(t, Tma, label=r'$T_m$')
 plt.legend()
 plt.xlabel('Time [s]')
 plt.ylabel('Temperature [C]')
 plt.grid()
 plt.title('Initial condition response')
-# %%
+
+# # Phase portrait
+plt.figure()
+ct.phase_plane_plot(
+    sys, [-10, 90, -10, 90], 10, gridspec=[10, 10],
+    plot_separatrices={'timedata': 200, 'arrows': 4})
+plt.plot(Tca, Tma,'r')
+plt.plot(np.arange(50)*evecs[0,0], np.arange(50)*evecs[1,0],'b')
+plt.plot(np.arange(50)*evecs[0,1], np.arange(50)*evecs[1,1],'k')
+
+
+plt.show()
