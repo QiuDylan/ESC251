@@ -59,10 +59,11 @@ plt.show()
 new_A = np.array([[ (- R/L), 1 , (-Kte/ L)],
              [0 ,0, 1],
              [Kte/J , 0 , -b/J]])
-new_B = np.array([[1/L], [0], [0]])
-new_C = np.array([[0],[0],[1]])
-new_D = np.array([[0],[0],[0]])
-new_sys = ss(A, B, C, D)
-mag, phase, omega = bode(new_sys)
+new_B = np.array([[va/L], [0], [0]])
+new_C = np.array([[0,0,1]])
+new_D = np.array([[0]])
+new_sys = ss(new_A, new_B, new_C, new_D)
+omega = bode(new_sys)   
+
 
 # %%
