@@ -15,7 +15,7 @@ va = 12 #v
 # %%
 
 # --- State Space Model -----
-A = np.array([[ (- R/L), 1 , (-Kte/ L)],
+A = np.array([[ (- R/L), 0 , (-Kte/ L)],
              [0 ,0, 1],
              [Kte/J , 0 , -b/J]])
 B = np.array([[va/L], [0], [0]])
@@ -56,14 +56,33 @@ plt.title('Step response')
 plt.show()
 # %%
 #BODE plot time
-new_A = np.array([[ (- R/L), 1 , (-Kte/ L)],
+omega = np.linspace(0,10000,1000)
+new_A = np.array([[ (- R/L), 0 , (-Kte/ L)],
              [0 ,0, 1],
              [Kte/J , 0 , -b/J]])
 new_B = np.array([[va/L], [0], [0]])
 new_C = np.array([[0,0,1]])
 new_D = np.array([[0]])
 new_sys = ss(new_A, new_B, new_C, new_D)
-omega = bode(new_sys)   
+bode(new_sys, omega)   
+# %%
+#Lsim
 
+T = np.linspace(0,1000,1000)
+u = np.sin(0.1*T)
+yout, T, xout = lsim(new_sys, U = u, T = T)
+#print(db2mag(1.5))
+plt.plot(T, yout, label = 'yout')
+plt.plot(T, u, label = 'input freq')
+plt.grid(True)
+plt.xlabel('Time')
+plt.ylabel('Input')
+plt.title('Simulation')
+plt.legend()
+plt.show()
+
+# %%
+#transfer function
+tf(new_sys)
 
 # %%
