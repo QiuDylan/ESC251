@@ -27,7 +27,7 @@ sys = ss(A, B, C, D)
 # Time vector
 t = np.linspace(0, 10e-4, 1000)
 
-# Step response
+# Pole plot
 p = poles(sys)
 
 plt.plot(np.real(p)[0], np.imag(p)[0], 'X')
@@ -41,7 +41,7 @@ plt.ylabel('imaginary')
 plt.title('pole plot')
 plt.show()
 # %%
-
+#Step response
 y,t = step(sys, t)
 y = np.squeeze(y)
 fig = plt.figure()
