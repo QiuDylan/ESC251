@@ -1,5 +1,6 @@
 # %%
-
+# ESC 251 Take Home Exam 1
+# Contributor: Dylan Qiu, The Cooper Union
 import numpy as np
 from control.matlab import * 
 import matplotlib.pyplot as plt
