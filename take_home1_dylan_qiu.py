@@ -62,7 +62,7 @@ plt.plot(t, Ti, label=r'Internal Temp Ti', linestyle = 'dashed')
 plt.grid(True)
 plt.xlabel('Time') 
 plt.ylabel('Temperature deg(c)')
-plt.title('Step response')
+plt.title('Temperature Evolution due to Input')
 plt.legend()
 plt.show()
 # %%
