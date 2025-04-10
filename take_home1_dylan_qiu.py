@@ -48,11 +48,12 @@ Ti = np.linspace(20,20, 1000)
 T1 = T2 = T3 = T4 = 15
 T = np.linspace(0,3600, 1000)
 To = 5 - 15 * T / 3600
-yout, t , xout = lsim(sys, U = To, T=T, X0 = [T1, T2, T3, T4])
-T1 = yout[:,0]
-T2 = yout[:,1]
-T3 = yout[:,2]
-T4 = yout[:,3]
+u = To - Ti 
+yout, t , xout = lsim(sys, U = u, T=T, X0 = [[T1 - 20], [T2 - 20], [T3 - 20], [T4- 20]])
+T1 = yout[:,0] + Ti
+T2 = yout[:,1] + Ti
+T3 = yout[:,2] + Ti
+T4 = yout[:,3] + Ti
 plt.plot(t, T1, label=r'Drywall T1')
 plt.plot(t, T2, label=r'Fiberglass T2')
 plt.plot(t, T3, label=r'Plywood T3')
