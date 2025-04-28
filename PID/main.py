@@ -8,18 +8,17 @@ import matplotlib.pyplot as plt
 # %%
 class Controller:
     def __init__(self):
-        self.y = 0
-        pass
+        self.ctrl = PIDControl(P.kp, P.ki, P.kd, P.umax, P.sigma, P.Ts)
+        
     def update(self, r, y):
-        # Compute the current error
-        u = r - y
+        u = self.ctrl.PID(r, y)
         #u = 0
-        return u 
+        return self.ctrl.saturate(u)
         
 class System:
     def __init__(self):
         self.t = 0.0
-        self.x = 10
+        self.x = 50
         self.intg = get_integrator(P.Ts, self.eom)
                 
     def eom(self, t, x, u):
@@ -37,11 +36,11 @@ system = System()
 controller = Controller()
 
 # Simulate step response
-t_history = [0]
-y_history = [0]
-u_history = [0]
+t_history = []
+y_history = []
+u_history = []
 
-r = 1
+r = 5
 y = 0
 t = 0
 
