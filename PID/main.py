@@ -9,6 +9,7 @@ class Controller:
         pass
         
     def update(self, r, y):
+        return y - r
         pass
     
 class System:
