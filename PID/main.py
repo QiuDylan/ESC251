@@ -18,7 +18,7 @@ class Controller:
 class System:
     def __init__(self):
         self.t = 0.0
-        self.x = 50
+        self.x = 60
         self.intg = get_integrator(P.Ts, self.eom)
                 
     def eom(self, t, x, u):
