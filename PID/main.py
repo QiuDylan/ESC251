@@ -12,13 +12,14 @@ class Controller:
         
     def update(self, r, y):
         u = self.ctrl.PID(r, y)
+        
         #u = 0
         return self.ctrl.saturate(u)
         
 class System:
     def __init__(self):
         self.t = 0.0
-        self.x = 60
+        self.x = 0
         self.intg = get_integrator(P.Ts, self.eom)
                 
     def eom(self, t, x, u):
@@ -40,7 +41,7 @@ t_history = []
 y_history = []
 u_history = []
 
-r = 5
+r = 20 * np.sin(P.Ts)
 y = 0
 t = 0
 
