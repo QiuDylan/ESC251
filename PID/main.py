@@ -41,12 +41,13 @@ t_history = []
 y_history = []
 u_history = []
 
-r = 20 * np.sin(P.Ts)
+T = np.linspace(0,10, P.nsteps)
+r = 10 * np.sin(0.25 * T)
 y = 0
 t = 0
 
 for i in range(P.nsteps):
-    u = controller.update(r, y) 
+    u = controller.update(r[i], y) 
     y = system.update(u) 
     t += P.Ts
 
@@ -58,7 +59,7 @@ for i in range(P.nsteps):
 # Plot response y due to step change in r
 plt.figure()
 plt.plot(t_history, y_history, label='Response (y)')
-plt.axhline(r, color='r', linestyle='--', label='Reference (r)')
+plt.plot(t_history, r, color='r', linestyle='--', label='Reference (r)')
 plt.xlabel('Time (s)')
 plt.ylabel('Output')
 plt.title('Step Response')
