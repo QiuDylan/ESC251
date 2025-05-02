@@ -41,7 +41,7 @@ t_history = []
 y_history = []
 u_history = []
 
-T = np.linspace(0,10, P.nsteps)
+T = np.linspace(0,40, P.nsteps) # implement sinusoid signal
 r = 10 * np.sin(0.25 * T)
 y = 0
 t = 0
