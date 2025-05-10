@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 __author__ = "Dirk M. Luchtenburg"
 __version__ = "Feb. 2025"
 __copyright__ = "Copyright 2025, Dirk M. Luchtenburg"
+"""
+Adapted by Dylan Qiu
+"""
 # %%
 # Parameters
 Ta = 20 # C
@@ -94,7 +97,7 @@ xa = np.zeros((2, len(t)))
 for (index, time) in enumerate(t):
     xa[:,index] = c[0] * evecs[:,0] * np.exp(evals[0]*time) + \
     c[1] * evecs[:,1] * np.exp(evals[1]*time)
-
+print(evecs[:,0])
 Tca = xa[0,:] #+ Ta
 Tma = xa[1,:] #+ Ta
 
@@ -105,16 +108,17 @@ plt.legend()
 plt.xlabel('Time [s]')
 plt.ylabel('Temperature [C]')
 plt.grid()
-plt.title('Initial condition response')
+plt.title('Analytical Initial condition response (From Evals/Evecs)')
 
 # # Phase portrait
 plt.figure()
 ct.phase_plane_plot(
     sys, [-10, 90, -10, 90], 10, gridspec=[10, 10],
     plot_separatrices={'timedata': 200, 'arrows': 4})
-plt.plot(Tca, Tma,'r')
+plt.plot(Tca, Tma,'b')
 plt.plot(np.arange(50)*evecs[0,0], np.arange(50)*evecs[1,0],'b')
-plt.plot(np.arange(50)*evecs[0,1], np.arange(50)*evecs[1,1],'k')
+plt.plot(np.arange(50)*evecs[0,1], np.arange(50)*evecs[1,1],'y')
 
 
 plt.show()
+

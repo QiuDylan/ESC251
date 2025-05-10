@@ -46,7 +46,7 @@ D = np.zeros((2, 1))
 sys = ss(A, B, C, D)
 
 # Compute the step response
-t = np.linspace(0, 10000, 10000)
+t = np.linspace(0, 4000, 10000)
 y, t = initial(sys, t, x0)
 
 # Plot the response
