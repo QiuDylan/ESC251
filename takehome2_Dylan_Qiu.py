@@ -1,12 +1,14 @@
 # %% 
 
+# Dylan Qiu, ME' 27 For Take Home Final ESC251 
+# Completed 5-13-2025 For Prof. Luchtenburg's Class
 import numpy as np
 import matplotlib.pyplot as plt
 import control
 from control.matlab import * 
 
 # %%
-# Given parameters
+# Givens
 m1 = 20  # kg
 m2 = 50  # kg
 k1 = 7410 - 6000 # N/m
@@ -14,7 +16,7 @@ k2 = 8230 * 2000 # N/m
 b1 = 1430 + 1430  # Ns/m
 b2 = 153  # Ns/m
 
-# State-space matrices
+# State-space 
 A = np.array([
     [0, 0, 1, 0],
     [0, 0, 0, 1],
@@ -36,7 +38,6 @@ C = np.array([
 
 D = np.zeros((2, 2))
 
-# Create state-space system
 sys = ss(A, B, C, D)
 
 # Calculate eigenvalues (poles)
@@ -45,7 +46,7 @@ print("System poles:")
 for i, pole in enumerate(poles):
     print(f"Pole {i+1}: {pole:.4f}")
 # %%
-# Sort poles by magnitude of real part
+# Sort and Plot poles
 sorted_poles = sorted(poles, key=lambda x: abs(x.real))
 slow_poles = sorted_poles[:2]
 fast_poles = sorted_poles[2:]
@@ -59,15 +60,13 @@ for pole in fast_poles:
     print(f"{pole:.4f}")
 
 # Calculate natural frequency and time constant for slow poles
-if slow_poles[0].imag != 0:  # Complex conjugate pair
-    natural_freq = abs(slow_poles[0])   # |s| = sqrt(real^2 + imag^2)
+if slow_poles[0].imag != 0:  
+    natural_freq = abs(slow_poles[0])   
     damping_ratio = -slow_poles[0].real / natural_freq
     time_constant = 1 / (damping_ratio * natural_freq)
     print(f"\nSlow poles natural frequency: {natural_freq:.4f} rad/s")
     print(f"Damping ratio: {damping_ratio:.4f}")
     print(f"Time constant: {time_constant:.4f} s")
-
-# Plot all poles
 for pole in poles:
     plt.plot(pole.real, pole.imag, 'rx', markersize=10)
 
@@ -84,21 +83,17 @@ plt.grid()
 plt.legend(['Poles', 'Slow Poles = blue', 'Fast Poles = green'])
 # %%
 
-# Frequencies to analyze
+# Frequencies Response
 frequencies = [1.57, 6.28, 25.13]  # rad/s
 
-# Time vector (ensure it covers several periods of the slowest frequency)
 t = np.linspace(0, 10, 10000)
-
-# Create figure for plotting
 plt.figure(figsize=(15, 12))
 gains = []
 
-# Run simulation for each frequency
 for i, omega in enumerate(frequencies):
     # Input signals
     u1 = 0.02 * np.sin(omega * t)  # z0(t) = 0.02*sin(omega*t)
-    u2 = 0.02 * omega * np.cos(omega * t)  # z0_dot(t) = derivative of z0(t)
+    u2 = 0.02 * omega * np.cos(omega * t)  # z0_dot(t) 
     u = np.column_stack((u1, u2))
     y, t_out, x = lsim(sys, u, t)
     z2 = y[:,0]
@@ -117,10 +112,6 @@ for i, omega in enumerate(frequencies):
     plt.ylabel('Displacement (m)')
     plt.title(f'Response to input frequency ω = {frequencies[i]} rad/s, Gain = {gain:.4f}')
     
-    # Add vertical line to indicate when steady state is reached
-    plt.axvline(x=5, color='gray', linestyle='--', alpha=0.5)
-    
-    # Determine if amplification or attenuation occurs
     if gain > 1:
         behavior = "amplification"
     else:
@@ -132,6 +123,7 @@ for i, omega in enumerate(frequencies):
     
     plt.legend()
 # %%
+# Response for Frequency[1] 
 gains = []
 new_c = np.array([
     [0, 1, 0, 0],
@@ -146,17 +138,14 @@ u2_new = 0.02 * frequencies[1] * np.cos(frequencies[1] * t_new)
 
 u_new = np.column_stack((u1_new, u2_new))
 y_out, t_newout, x = lsim(sys, u_new, t_new)
-np.squeeze(y_out)
 z2_new = y_out[:,0]
 
-    
 start_idx = np.where(t_new >= 2)[0][0]
 max_input = np.max(np.abs(u1_new[start_idx:]))
 max_output = np.max(np.abs(z2_new[start_idx:]))
 gain = max_output / max_input
 gains.append(gain)
-    
-# Plot results
+
 plt.plot(t_newout, u1_new, 'b-', label='Input z0(t)')
 plt.plot(t_newout, z2_new, 'r-', label='Driver displacement z2(t)')
 #plt.plot(t_newout, z2_new * m2, label = 'Force experienced by driver')
@@ -166,7 +155,8 @@ plt.ylabel('Displacement (m)')
 plt.legend()
 plt.title(f'Response to input frequency ω = {frequencies[1]} rad/s, Gain = {gain:.4f}')
 # %%
-
+ 
+#Driver Response
 plt.plot(t_newout, z2_new * m2, label = 'Force experienced by driver')
 plt.xlabel('Time (s)')
 plt.ylabel('Force (N)')
