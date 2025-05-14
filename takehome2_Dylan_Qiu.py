@@ -9,9 +9,9 @@ from control.matlab import *
 # Given parameters
 m1 = 20  # kg
 m2 = 50  # kg
-k1 = 7410  # N/m
-k2 = 8230 #- 500 # N/m
-b1 = 1430 #+ 10000  # Ns/m
+k1 = 7410 - 6000 # N/m
+k2 = 8230 * 2000 # N/m
+b1 = 1430 + 1430  # Ns/m
 b2 = 153  # Ns/m
 
 # State-space matrices
@@ -134,7 +134,7 @@ for i, omega in enumerate(frequencies):
 # %%
 gains = []
 new_c = np.array([
-    [0, 0, 0, 1],
+    [0, 1, 0, 0],
     #[0, 0, 0, 0]
 ])
 new_d = np.zeros((1,2))
@@ -162,7 +162,7 @@ plt.plot(t_newout, z2_new, 'r-', label='Driver displacement z2(t)')
 #plt.plot(t_newout, z2_new * m2, label = 'Force experienced by driver')
 plt.grid(True)
 plt.xlabel('Time (s)')
-plt.ylabel('Acceleration (m/s^2)')
+plt.ylabel('Displacement (m)')
 plt.legend()
 plt.title(f'Response to input frequency ω = {frequencies[1]} rad/s, Gain = {gain:.4f}')
 # %%
