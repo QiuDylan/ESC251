@@ -10,8 +10,8 @@ from control.matlab import *
 m1 = 20  # kg
 m2 = 50  # kg
 k1 = 7410  # N/m
-k2 = 8230  # N/m
-b1 = 1430  # Ns/m
+k2 = 8230 #- 500 # N/m
+b1 = 1430 #+ 10000  # Ns/m
 b2 = 153  # Ns/m
 
 # State-space matrices
@@ -30,14 +30,14 @@ B = np.array([
 ])
 
 C = np.array([
-    [0, 0, 1, 0],
+    [0, 1, 0, 0],
     [0, 0, 0, 1]
 ])
 
 D = np.zeros((2, 2))
 
 # Create state-space system
-sys = control.StateSpace(A, B, C, D)
+sys = ss(A, B, C, D)
 
 # Calculate eigenvalues (poles)
 poles = np.linalg.eigvals(A)
@@ -67,16 +67,6 @@ if slow_poles[0].imag != 0:  # Complex conjugate pair
     print(f"Damping ratio: {damping_ratio:.4f}")
     print(f"Time constant: {time_constant:.4f} s")
 
-plt.axis('equal')
-max_range = max(abs(np.max(poles.real)), abs(np.min(poles.real)), 
-                abs(np.max(poles.imag)), abs(np.min(poles.imag)))
-plt.xlim(-max_range*1.1, 0.1*max_range)
-plt.ylim(-max_range*0.6, max_range*0.6)
-plt.figure(figsize=(10, 8))
-plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
-plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
-plt.grid()
-
 # Plot all poles
 for pole in poles:
     plt.plot(pole.real, pole.imag, 'rx', markersize=10)
@@ -92,8 +82,6 @@ plt.ylabel('Imaginary')
 plt.title('Pole Plot in Complex Plane')
 plt.grid()
 plt.legend(['Poles', 'Slow Poles = blue', 'Fast Poles = green'])
-
-# Adjust zoom to show all poles clearly
 # %%
 
 # Frequencies to analyze
@@ -113,22 +101,21 @@ for i, omega in enumerate(frequencies):
     u2 = 0.02 * omega * np.cos(omega * t)  # z0_dot(t) = derivative of z0(t)
     u = np.column_stack((u1, u2))
     y, t_out, x = lsim(sys, u, t)
-    z2 = y
-    
-    #start_idx = np.where(t >= 5)[0][0]
-    max_input = np.max(np.abs(u1))
-    max_output = np.max(np.abs(z2))
+    z2 = y[:,0]
+    start_idx = np.where(t >= 1)[0][0]
+    max_input = np.max(np.abs(u1[start_idx:]))
+    max_output = np.max(np.abs(z2[start_idx:]))
     gain = max_output / max_input
     gains.append(gain)
     
     # Plot results
     plt.subplot(3, 1, i+1)
-    plt.plot(t, u1, 'b-', label='Input z0(t)')
-    plt.plot(t, z2, 'r-', label='Driver displacement z2(t)')
+    plt.plot(t_out, u1, 'b-', label='Input z0(t)')
+    plt.plot(t_out, z2, 'r-', label='Driver displacement z2(t)')
     plt.grid(True)
     plt.xlabel('Time (s)')
     plt.ylabel('Displacement (m)')
-    plt.title(f'Response to input frequency ω = {omega} rad/s, Gain = {gain:.4f}')
+    plt.title(f'Response to input frequency ω = {frequencies[i]} rad/s, Gain = {gain:.4f}')
     
     # Add vertical line to indicate when steady state is reached
     plt.axvline(x=5, color='gray', linestyle='--', alpha=0.5)
@@ -144,5 +131,45 @@ for i, omega in enumerate(frequencies):
                  bbox=dict(boxstyle="round,pad=0.3", fc="lightyellow", ec="orange", alpha=0.8))
     
     plt.legend()
+# %%
+gains = []
+new_c = np.array([
+    [0, 0, 0, 1],
+    #[0, 0, 0, 0]
+])
+new_d = np.zeros((1,2))
+t_new = np.linspace(0,10,1000)
+new_sys = ss(A,B, new_c, new_d)
 
+u1_new = 0.02 * np.sin(frequencies[1] * t_new)
+u2_new = 0.02 * frequencies[1] * np.cos(frequencies[1] * t_new)
+
+u_new = np.column_stack((u1_new, u2_new))
+y_out, t_newout, x = lsim(sys, u_new, t_new)
+np.squeeze(y_out)
+z2_new = y_out[:,0]
+
+    
+start_idx = np.where(t_new >= 2)[0][0]
+max_input = np.max(np.abs(u1_new[start_idx:]))
+max_output = np.max(np.abs(z2_new[start_idx:]))
+gain = max_output / max_input
+gains.append(gain)
+    
+# Plot results
+plt.plot(t_newout, u1_new, 'b-', label='Input z0(t)')
+plt.plot(t_newout, z2_new, 'r-', label='Driver displacement z2(t)')
+#plt.plot(t_newout, z2_new * m2, label = 'Force experienced by driver')
+plt.grid(True)
+plt.xlabel('Time (s)')
+plt.ylabel('Acceleration (m/s^2)')
+plt.legend()
+plt.title(f'Response to input frequency ω = {frequencies[1]} rad/s, Gain = {gain:.4f}')
+# %%
+
+plt.plot(t_newout, z2_new * m2, label = 'Force experienced by driver')
+plt.xlabel('Time (s)')
+plt.ylabel('Force (N)')
+plt.legend()
+plt.title(f'Force experienced by driver ω = {frequencies[1]} rad/s')
 # %%
