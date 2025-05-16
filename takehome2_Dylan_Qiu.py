@@ -11,9 +11,9 @@ from control.matlab import *
 # Givens
 m1 = 20  # kg
 m2 = 50  # kg
-k1 = 7410 - 6000 # N/m
-k2 = 8230 * 2000 # N/m
-b1 = 1430 + 1430  # Ns/m
+k1 = 7410 #- 6000 # N/m
+k2 = 8230 #* 2000 # N/m
+b1 = 1430 #+ 1430  # Ns/m
 b2 = 153  # Ns/m
 
 # State-space 
